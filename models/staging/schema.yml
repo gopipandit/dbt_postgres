@@ -1,0 +1,73 @@
+
+version: 2
+
+models:
+  - name: stage_customer
+    description: "Staging model for customer data"
+    columns:
+      - name: customer_id
+        data_tests:
+          - not_null
+          - unique
+
+      - name: first_name
+        data_tests:
+          - not_null
+
+  - name: stage_orders
+    description: "Staging model for order data"
+    columns:
+      - name: order_id
+        data_tests:
+          - not_null
+          - unique
+
+      - name: customer_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stage_customer')
+                field: customer_id
+
+      - name: status
+        data_tests:
+          - accepted_values:
+              arguments:
+                values:
+                  - placed
+                  - shipped
+                  - completed
+                  - return_pending
+                  - returned
+
+  - name: stage_payments
+    description: "Staging model for payment data"
+    columns:
+      - name: payment_id
+        data_tests:
+          - not_null
+          - unique
+
+      - name: order_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stage_orders')
+                field: order_id
+
+      - name: payment_method
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - credit_card
+                  - coupon
+                  - bank_transfer
+                  - gift_card
+
+      - name: amount
+        data_tests:
+          - not_null
