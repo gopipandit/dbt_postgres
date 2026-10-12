@@ -3,6 +3,7 @@ version: 2
 
 sources:
   - name: jaffle_shop
+    database: postgres
     schema: xyz_base
     tables:
       - name: raw_customers
